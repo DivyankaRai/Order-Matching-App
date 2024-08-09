@@ -10,7 +10,7 @@ const PendingOrders = ({ pendingBuyerOrders, pendingSellerOrders }) => {
                 {/* Pending Buyer Orders Table */}
                 <Box flex="1" borderWidth={1} borderRadius="md" p={4}>
                     <Heading as="h2" size="lg" mb={4}>Pending Buyer Orders</Heading>
-                    <Table variant="striped" colorScheme="blue">
+                    <Table variant="striped" colorScheme="red">
                         <Thead>
                             <Tr>
                                 <Th>Buyer Qty</Th>

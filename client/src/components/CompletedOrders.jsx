@@ -21,7 +21,7 @@ const CompletedOrders = () => {
     return (
         <Box p={4}>
             <Heading as="h2" size="lg" mb={4}>Completed Orders</Heading>
-            <Table variant="striped" colorScheme="green">
+            <Table variant="striped" colorScheme="blue">
                 <Thead>
                     <Tr>
                         <Th>Price</Th>
