@@ -2,7 +2,6 @@ import React from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { OrderProvider } from './context/OrderContext';
-import OrderFormPage from './pages/OrderFormPage';
 import DashboardPage from './pages/DashboardPage';
 import SimpleNavbar from './components/Navbar';
 
@@ -11,10 +10,9 @@ const App = () => {
         <ChakraProvider>
             <Router>
                  <SimpleNavbar/>
-                <OrderProvider>
+                    <OrderProvider>
                     <Routes>
-                        <Route path="/dashboard" element={<DashboardPage />} />
-                        <Route path="/" element={<OrderFormPage />} />
+                        <Route path="/" element={<DashboardPage />} />
                     </Routes>
                  </OrderProvider>
             </Router>

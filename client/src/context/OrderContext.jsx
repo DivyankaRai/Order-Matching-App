@@ -4,44 +4,69 @@ import { useNavigate } from 'react-router-dom';
 
 export const OrderContext = createContext();
 
-
 export const OrderProvider = ({ children }) => {
 
-    const navigate = useNavigate();
-
-    const [pendingOrders, setPendingOrders] = useState([]);
+    const [pendingBuyerOrders, setPendingBuyerOrders] = useState([]);
+    const [pendingSellerOrders, setPendingSellerOrders] = useState([]);
     const [completedOrders, setCompletedOrders] = useState([]);
 
-    const fetchOrders = async () => {
-        const response = await axios.get('https://order-matching-app-backend.onrender.com/orders');
-        setPendingOrders(response.data);
+    const fetchPendingBuyerOrders = async () => {
+        try {
+            const response = await axios.get('https://order-matching-app-backend.onrender.com/pending-buyer-orders');
+            console.log(response)
+            setPendingBuyerOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching pending buyer orders:', error);
+        }
+    };
+
+    const fetchPendingSellerOrders = async () => {
+        try {
+            const response = await axios.get('https://order-matching-app-backend.onrender.com/pending-seller-orders');
+            console.log(response)
+            setPendingSellerOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching pending seller orders:', error);
+        }
     };
 
     const fetchCompletedOrders = async () => {
-        const response = await axios.get('https://order-matching-app-backend.onrender.com/completed-orders');
-        setCompletedOrders(response.data);
+        try {
+            const response = await axios.get('https://order-matching-app-backend.onrender.com/completed-orders');
+            setCompletedOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching completed orders:', error);
+        }
     };
 
     const addOrder = async (order) => {
         try {
-            const response = await axios.post('https://order-matching-app-backend.onrender.com/orders', order);
+            const endpoint = order.buyerPrice ? 'buyer' : 'seller';
+            const response = await axios.post(`https://order-matching-app-backend.onrender.com/${endpoint}-order`, order);
             const { completedOrders: newCompletedOrders } = response.data;
 
-            fetchOrders();
+            fetchPendingBuyerOrders();
+            fetchPendingSellerOrders();
             setCompletedOrders([...completedOrders, ...newCompletedOrders]);
-            navigate('/dashboard'); 
         } catch (error) {
             console.error('Error adding order:', error);
         }
     };
 
     useEffect(() => {
-        fetchOrders();
+        fetchPendingBuyerOrders();
+        fetchPendingSellerOrders();
         fetchCompletedOrders();
     }, []);
 
     return (
-        <OrderContext.Provider value={{ pendingOrders, completedOrders, addOrder, fetchCompletedOrders }}>
+        <OrderContext.Provider value={{ 
+            pendingBuyerOrders, 
+            pendingSellerOrders, 
+            completedOrders, 
+            addOrder, 
+            fetchCompletedOrders 
+        }}>
             {children}
         </OrderContext.Provider>
     );
